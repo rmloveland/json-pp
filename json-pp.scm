@@ -43,7 +43,7 @@
      (dotimes *indent-by* (display " ")))
     ((dedenting-char? character)
      (newline)
-     (dotimes *indent-by* (display " "))
+     (dotimes (- *indent-by* 4) (display " "))
      (display character)
      (newline)
      (set! *indent-by* (- *indent-by* 4))

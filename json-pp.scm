@@ -15,9 +15,7 @@
           (else #f)))
 
 (define (comma? chr)
-    (if (char=? chr #\,)
-        #t
-        #f))
+  (char=? chr #\,))
 
 (define (other-char? chr)
   (not (or

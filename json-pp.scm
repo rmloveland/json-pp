@@ -25,6 +25,9 @@
 	(dedenting-char? chr)
 	(comma? chr))))
 
+(define (newline? chr)
+  (char=? chr #\newline))
+
 (define-syntax dotimes
   (syntax-rules ()
     ((dotimes count body ...)
@@ -45,7 +48,9 @@
      (newline)
      (dotimes (- *indent-by* 4) (display " "))
      (display character)
-     (newline)
+     (if (and (not (newline? (peek-char)))
+	      (not (dedenting-char? (peek-char))))
+	 (newline))
      (set! *indent-by* (- *indent-by* 4))
      (dotimes *indent-by* (display " ")))
     ((comma? character)

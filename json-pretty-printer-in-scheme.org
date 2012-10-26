@@ -12,95 +12,29 @@
 
 ** Algorithm
 
-  There will be a global variable, *indent-level*, which will tell us
-  what indentation level to use. Another variable, *indent-chars*,
-  will tell us how many characters to indent by.
+  There will be a global variable, *indent-by*, which will tell us
+  how many characters to indent by.
 
   Begin reading in characters from standard input one at a time.
   Every time you read an ``indented'' character:
   
   1. Print the character
   2. Print a newline
-  3. Increment `indent-level'
-  4. Set *indent-by* to the value of `(* indent-level indent-chars)'
+  3. Increment `indent-by' by some agreed-upon value /n/
   5. Indent by `indent-by' characters
 
   Every time you read an ``outdented'' character:
 
   1. Print a newline
-  2. Print the character
-  3. Print a newline
-  4. Decrement `indent-level'
-  5. Set `indent-by' to the value `(* indent-level indent-chars)'. (Check
-     that this value does not become negative.)
+  2. Indent by `indent-by' characters
+  3. Print the character
+  4. Print a newline
+  5. Decrement `indent-by' by /n/
   6. Indent by `indent-by' characters
 
      
-  Finally, the comma is a special case:
+  The comma is a special case:
 
   1. Print the character
   2. Print a newline
-  3. Do not change the value of `indent-by'
-  4. Indent by `indent-by' characters
-
-*** Program Text
-
-  #+name: json-pp
-  #+begin_src scheme48 :tangle json-pp.scm
-    #!/usr/local/bin/scsh \
-    -e main -s
-    !#
-    
-    (define indenting-char?
-      (lambda (chr)
-        (cond ((char=? chr #\{) #t)
-              ((char=? chr #\[) #t)
-              (else #f))))
-    
-    (define dedenting-char?
-      (lambda (chr)
-        (cond ((char=? chr #\}) #t)
-              ((char=? chr #\]) #t)
-              (else #f))))
-    
-    (define comma?
-      (lambda (chr)
-        (if (char=? chr #\,)
-            #t
-            #f)))
-    
-    (define-syntax dotimes
-      (syntax-rules ()
-        ((dotimes count body ...)
-         (let loop ((counter count))
-           (if (> counter 0)
-               (begin
-                 body ...
-                 (loop (- counter 1))))))))
-    
-    (define (main argv)
-      (awk (read-char) (character)
-           ((indent-level 0)
-            (indent-chars 4)
-            (indent-by
-             (* indent-level indent-chars)))
-        ((indenting-char? character)
-         ((display character)
-          (newline)
-          (set! indent-level (+ 1 indent-level))
-          (set! indent-by (* indent-level indent-chars))
-          (dotimes indent-by (display " ")))
-         ((dedenting-char? character)
-          ((newline)
-           (display character)
-           (newline)
-           (set! indent-level (- indent-level 1))
-           (set! indent-by (* indent-level indent-chars))
-           (dotimes indent-by (display " "))))
-         ((comma? character)
-          ((display character)
-           (newline)
-           (dotimes indent-by (display " "))))
-         (else (display character)))))
-    
-  #+end_src
+  3. Indent by `indent-by' characters (as is)

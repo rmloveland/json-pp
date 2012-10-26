@@ -2,8 +2,6 @@
 -e main -s
 !#
 
-(define *indent-level* 0)
-(define *indent-chars* 4)
 (define *indent-by* 0)
 
 (define (indenting-char? chr)
@@ -41,16 +39,14 @@
     ((indenting-char? character)
      (display character)
      (newline)
-     (set! *indent-level* (+ 1 *indent-level*))
-     (set! *indent-by* (* *indent-level* *indent-chars*))
+     (set! *indent-by* (+ *indent-by* 4))
      (dotimes *indent-by* (display " ")))
     ((dedenting-char? character)
      (newline)
      (dotimes *indent-by* (display " "))
      (display character)
      (newline)
-     (set! *indent-level* (- *indent-level* 1))
-     (set! *indent-by* (* *indent-level* *indent-chars*))
+     (set! *indent-by* (- *indent-by* 4))
      (dotimes *indent-by* (display " ")))
     ((comma? character)
      (display character)
